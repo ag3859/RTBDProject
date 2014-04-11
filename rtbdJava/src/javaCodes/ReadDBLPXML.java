@@ -11,10 +11,8 @@ public class ReadDBLPXML {
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		
-		BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Aditya Garg\\Documents\\GitHub\\RTBDData\\oaiharvesterdemo\\citeseerx_alldata.xml"));
-	
-		BufferedWriter bw = new BufferedWriter(new FileWriter("C:\\Users\\Aditya Garg\\Documents\\GitHub\\RTBDData\\oaiharvesterdemo\\citeseerx_alldata_small.xml"));
-	
+		BufferedReader br = new BufferedReader(new FileReader("..\\..\\RTBDData\\oaiharvesterdemo\\citeseerx_alldata.xml"));
+		BufferedWriter bw = new BufferedWriter(new FileWriter("..\\..\\RTBDData\\oaiharvesterdemo\\citeseerx_alldata_small.xml"));
 		for (int i =0;i<10000; i++)
 		{
 			bw.write(br.readLine());

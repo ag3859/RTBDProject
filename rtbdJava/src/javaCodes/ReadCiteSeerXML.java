@@ -27,7 +27,7 @@ public class ReadCiteSeerXML {
 //			count++;
 			if(line.contains("<dc:creator>"))
 			{
-				bw.write(line.replace("<dc:creator>", "<creator>").replace("</dc:creator>", "</dc:creator>"));			
+				bw.write(line.replace("<dc:creator>", "<creator>").replace("</dc:creator>", "</creator>"));			
 				bw.newLine();
 				lineNumber++;
 			}

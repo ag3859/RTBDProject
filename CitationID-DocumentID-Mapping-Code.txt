@@ -1,0 +1,4 @@
+grep '^INSERT INTO `citations` VALUES .*' csx-db-jun_11_2012.sql > citationTable
+nohup cut -d'(' -f2- citationTable > citationTableWithoutBracket &
+./script.sh citationTableWithoutBracket
+cut -d "'" -f1,2 WithQuotes | sed "s/'//" > CitationID-DocumentIDMapping.txt

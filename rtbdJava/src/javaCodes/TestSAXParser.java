@@ -1,13 +1,14 @@
 package javaCodes;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.xml.parsers.*;
 
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException; 
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 
 public class TestSAXParser {
 	public static void main(String [] args){
@@ -20,8 +21,9 @@ public class TestSAXParser {
            doc.getDocumentElement().getNodeName());
       
       NodeList listOfAuthors = doc.getElementsByTagName("author");
-      int numOfAuthors = listOfAuthors.getLength();
+      int numOfAuthors = countUnique(listOfAuthors);
       System.out.println("Total no of people : " + numOfAuthors);
+      
       
 		} catch (SAXParseException err) {
       System.out.println ("** Parsing error" + ", line " 
@@ -39,6 +41,16 @@ public class TestSAXParser {
 		
 	}
 	
+	//Returns the number of unique nodes in a given list, by value
+	public static int countUnique(NodeList nl){
+		int count = 0;
+		Set <String> uniqueNodes = new HashSet <String>();
+		for (int i =0;i<nl.getLength();i++){
+			uniqueNodes.add(nl.item(i).getNodeName());
+		}
+	
+		return uniqueNodes.size();
+	}
 	
 	public static int countByYear (String tag, int year) {
 		int count = 0;

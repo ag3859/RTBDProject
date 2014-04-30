@@ -14,13 +14,15 @@ public class TestSAXParser {
 		try{
 			DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-      Document doc = docBuilder.parse (new File("temp"));
+      Document doc = docBuilder.parse (new File("dblp_db.xml"));
       doc.getDocumentElement ().normalize ();
       System.out.println ("Root element of the doc is " + 
            doc.getDocumentElement().getNodeName());
+      
       NodeList listOfAuthors = doc.getElementsByTagName("author");
       int numOfAuthors = listOfAuthors.getLength();
       System.out.println("Total no of people : " + numOfAuthors);
+      
 		} catch (SAXParseException err) {
       System.out.println ("** Parsing error" + ", line " 
           + err.getLineNumber () + ", uri " + err.getSystemId ());
@@ -33,7 +35,15 @@ public class TestSAXParser {
      }catch (Throwable t) {
      t.printStackTrace ();
      }
+		
+		
 	}
 	
+	
+	public static int countByYear (String tag, int year) {
+		int count = 0;
+		
+		return count;
+	}
 
 }

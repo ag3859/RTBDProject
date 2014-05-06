@@ -15,9 +15,9 @@ public class GetConfJournals {
 	public static void main(String[] args) throws IOException 
 	{
 		//Read the filter file, only the conferences we are interested in. Filter file name coded as dbconf.txt
-		readFile();
+		//readFile();
 		//Extract relevant records based on the filter file. input file name coded as dblp.xml
-		cleanFile();
+		//cleanFile();
 		//flatten the XML records to a text file for use in map reduce, appending xml tags as labels
 		flatten();
 	}
@@ -107,6 +107,9 @@ public class GetConfJournals {
 		
 		while ((line = br.readLine()) != null) 
 		{
+			line = line.trim();
+//			if (line.contains("key=\"conf/vldb/75"))
+//				System.out.println();
 			if(line.length()>0)
 			{
 				if (tagOpen && line.contains("</"+recordTag))

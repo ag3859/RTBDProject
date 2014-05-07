@@ -1,7 +1,9 @@
 package javaCodes;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -63,35 +65,82 @@ public class TestJdomParser {
 			}
 			
 		}
-		//printHashMap(authconf);s
-		for (String l:conflist){
-			System.out.println(l);
-		}
+		//printHashMap(authconf);
 		
 		int size = conflist.size();
-		Double [][] jcd = new Double[size][size];
+		System.out.println("size ="+size);
+		Float [][] jcd = new Float[size][size];
 		int k1=0, k2=0;
-		
-		for (String i : conflist){
-			for (String j : conflist){
-				Set <String> union = new HashSet<String>(authconf.get(i));
-				union.addAll(authconf.get(j));
-				Set <String> intersection = new HashSet<String>(authconf.get(i));
-				intersection.retainAll(authconf.get(j));
-				jcd[k1][k2] = (double)intersection.size()/(double)union.size();
-				k2++;
-			}
-			k1++;
-			k2=0;
-		}
-		/*
 		for (int i =0;i<size;i++){
-			for (int j=0;j<size;j++){
-				System.out.print(jcd[i][j]+" ");
+			for  (int j =0;j<size;j++){
+				String conf1 = conflist.get(i);
+				String conf2 = conflist.get(j);
+				Set <String> union = new HashSet <String>(authconf.get(conf1));
+				union.addAll(authconf.get(conf2));
+				Set <String> intersection = new HashSet <String>(authconf.get(conf1));
+				intersection.retainAll(authconf.get(conf2));
+				jcd[i][j]= (float)intersection.size()/(float)union.size();
 			}
-			System.out.println();
 		}
-		*/
+		
+		size = conflist.size();
+		BufferedWriter outputWriter = null;
+	  try {
+			outputWriter = new BufferedWriter(new FileWriter("Jaccard_Distance.txt"));
+		
+	  for (int i = 0; i < size; i++) {
+	  	for (int j =0;j<size;j++){
+	  		outputWriter.write(jcd[i][j]+",");
+	  	}
+	    
+	    outputWriter.newLine();
+	  	}
+	  	outputWriter.flush();  
+	  	outputWriter.close(); 
+	  } catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
+		
+		
+		
+		
+		
+
+//		File file = (new File("Jaccard_Distance"));
+//		if (!file.exists()) {
+//			try {
+////				file.createNewFile();
+////				FileWriter fw = new FileWriter(file);
+////				BufferedWriter bw = new BufferedWriter(fw);
+////				for (int i =0;i<size;i++){
+////					for (int j=0;j<size;j++){
+////						System.out.print(jcd[i][j]+" ");
+////						bw.write(jcd[i][j]+" ");
+////					}
+////					System.out.println();
+//				PrintWriter writer = new PrintWriter("Jaccard_Distance.txt", "UTF-8");
+//				for (int i =0;i<40;i++){
+//					for (int j=0;j<size;j++){
+////						System.out.print(jcd[i][j]+" ");
+//						writer.print(jcd[j][i]+" ");
+//					}
+//					writer.println();
+//				}
+//				for (int i =40;i<size;i++){
+//					for (int j=0;j<size;j++){
+////						System.out.print(jcd[i][j]+" ");
+//						writer.print(jcd[j][i]+" ");
+//					}
+//					writer.println();
+//				}
+//			} catch (IOException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+		
+	
 		
 	}
 	
@@ -104,9 +153,10 @@ public class TestJdomParser {
 		    String key = (String)entry.getKey();
 		    HashSet val = (HashSet)entry.getValue();
 		    writer.println(key + "," + val);
+		    System.out.println(key + "," + val.size());
+//		    writer.println(key);
 			}
 		} catch (FileNotFoundException | UnsupportedEncodingException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 	}

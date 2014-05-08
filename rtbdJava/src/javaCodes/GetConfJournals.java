@@ -14,19 +14,22 @@ public class GetConfJournals {
 
 	public static void main(String[] args) throws IOException 
 	{
-		//Read the filter file, only the conferences we are interested in. Filter file name coded as dbconf.txt
-		//readFile();
-		//Extract relevant records based on the filter file. input file name coded as dblp.xml
-		//cleanFile();
-		//flatten the XML records to a text file for use in map reduce, appending xml tags as labels
-		flatten();
+		for(int tier = 1; tier<=4; tier++)
+		{
+			//Read the filter file, only the conferences we are interested in. Filter file name coded as dbconf.txt
+			readFile(tier);
+			//Extract relevant records based on the filter file. input file name coded as dblp.xml
+			cleanFile(tier);
+			//flatten the XML records to a text file for use in map reduce, appending xml tags as labels
+			flatten(tier);
+		}
 	}
 
-	static void readFile() {
+	static void readFile(int tier) {
 		BufferedReader Keys = null;
 		String key;
 		try {
-			Keys = new BufferedReader(new FileReader("..\\..\\RTBDData\\dbconf.txt"));
+			Keys = new BufferedReader(new FileReader("..\\..\\RTBDData\\tier"+tier));
 			ListOfKeys = new ArrayList<String>();
 			while ((key = Keys.readLine()) != null) 
 			{
@@ -40,7 +43,7 @@ public class GetConfJournals {
 		}
 	}
 	
-	static void cleanFile() throws IOException
+	static void cleanFile(int tier) throws IOException
 	{
 		String line = "";
 		String tag = "";
@@ -48,7 +51,7 @@ public class GetConfJournals {
 		BufferedReader br;
 		BufferedWriter bw;
 		br = new BufferedReader(new FileReader("..\\..\\RTBDData\\dblp.xml"));
-		bw = new BufferedWriter(new FileWriter("..\\..\\RTBDData\\dblp_conf_journals.xml"));
+		bw = new BufferedWriter(new FileWriter("..\\..\\RTBDData\\dblp_conf_journals_"+tier+".xml"));
 
 		while ((line = br.readLine()) != null) 
 		{
@@ -92,12 +95,12 @@ public class GetConfJournals {
 		return false;
 	}
 	
-	static void flatten() throws IOException
+	static void flatten(int tier) throws IOException
 	{
 		BufferedReader br;
 		BufferedWriter bw;
-		br = new BufferedReader(new FileReader("..\\..\\RTBDData\\dblp_conf_journals.xml"));
-		bw = new BufferedWriter(new FileWriter("..\\..\\RTBDData\\dblp_conf_journals_flattened.txt"));
+		br = new BufferedReader(new FileReader("..\\..\\RTBDData\\dblp_conf_journals_"+tier+".xml"));
+		bw = new BufferedWriter(new FileWriter("..\\..\\RTBDData\\dblp_conf_journals_flattened_"+tier+".txt"));
 		
 		String line = "";
 		String recordTag = "";

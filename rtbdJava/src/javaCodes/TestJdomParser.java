@@ -25,12 +25,8 @@ public class TestJdomParser {
 	Document xml = null;
 	Element root = null;
 	HashMap <String, HashSet<String>> authconf = new HashMap <String, HashSet<String>>();
-	Set <Element> tier1Authors=new HashSet <Element>();
-	Set <Element> tier2Authors=new HashSet <Element>();
-	Set <Element> tier3Authors=new HashSet <Element>();
-	Set <Element> tier4Authors=new HashSet <Element>();
 	
-	
+	List <HashSet  <String>> Authors = new ArrayList <HashSet <String>>() ;
 	public static void main(String args[]){
      
      //creating JDOM SAX parser
@@ -38,6 +34,10 @@ public class TestJdomParser {
    
      //reading XML document
      TestJdomParser t = new TestJdomParser();
+     t.Authors.add(new HashSet <String> ());
+     t.Authors.add(new HashSet <String> ());
+     t.Authors.add(new HashSet <String> ());
+     t.Authors.add(new HashSet <String> ());
      
      try {
              t.xml = builder.build(new File("dblp_db.xml"));
@@ -68,7 +68,8 @@ public class TestJdomParser {
 				/*"sigkdd"*/};
 		String [] t2 = {"cidr","cikm","coopis","dasfaa","dbsec","dexa","dood","edbt",
 				"fodo","icdt","ida","pakdd","pkdd","sdm",/*"siam"*/"ssdbm","wise"};
-		String [] t4 = {"artdb","cdb","dmdw","dmkd","dolap","fqas","ideal",
+		String [] t4 = {
+				"artdb","cdb","dmdw","dmkd","dolap","fqas","ideal",
 				"krdb",
 				"nldb",
 				"oodbs",
@@ -79,6 +80,8 @@ public class TestJdomParser {
 				/*"dblp","efis/efdbs","efis","efdbs","iw-mmdbms","kr",*/};
 		
 		String [] tAll = new String[0];
+		
+		
 		
 		List <String> conflist = new ArrayList <String> ();
 		for (Element e : root.getChildren()){ //down to the inproceedings
@@ -102,6 +105,7 @@ public class TestJdomParser {
 			}
 		}
 		*/
+		
 		tAll = concat(tAll,t1);
 		tAll = concat(tAll,t2);
 		tAll = concat(tAll,t3);
@@ -111,13 +115,71 @@ public class TestJdomParser {
 			System.out.println(tAll[i]);
 		}
 		
-		
-	 JaccardComputeWorker(t1,"JaccardT1.txt");
-	 JaccardComputeWorker(t2,"JaccardT2.txt");
-		JaccardComputeWorker(t3,"JaccardT3.txt");
-		JaccardComputeWorker(t4,"JaccardT4.txt");
-		JaccardComputeWorker(tAll,"JaccardAll.txt");
+		String []tiers = {"Tier 1","Tier 2","Tier 3","Tier 4"};
+	 getTierAuthors(0,Arrays.asList(t1));
+	 getTierAuthors(1,Arrays.asList(t2));
+	 getTierAuthors(2,Arrays.asList(t3));
+	 getTierAuthors(3,Arrays.asList(t4));
+	 JaccardComputeWorker("JaccardAcross.txt");
+//	 JaccardComputeWorker(t1,"JaccardT1.txt");
+//	 JaccardComputeWorker(t2,"JaccardT2.txt");
+//		JaccardComputeWorker(t3,"JaccardT3.txt");
+//		JaccardComputeWorker(t4,"JaccardT4.txt");
+//		JaccardComputeWorker(tAll,"JaccardAll.txt");
 	}
+	
+	public void getTierAuthors(int tier, List <String> conflist){
+		for (String l : conflist){
+			Authors.get(tier).addAll(authconf.get(l));
+		}
+	}
+	
+	public void JaccardComputeWorker(String fname){
+		Double [][] jcd = new Double[4][4];
+		for (int i =0;i<4;i++){
+			
+			for  (int j =0;j<4;j++){
+				System.out.print("\n "+Authors.get(i).size());
+				System.out.print(" "+Authors.get(j).size());
+//				String conf1 = conflist[i];
+//				String conf2 = conflist[j];
+				Set <String> union = new HashSet <String>(Authors.get(i));
+				union.addAll(Authors.get(j));
+				Set <String> intersection = new HashSet <String>(Authors.get(i));
+				intersection.retainAll(Authors.get(j));
+				System.out.print(" "+intersection.size()+" "+union.size());
+				jcd[i][j]= (double)intersection.size()/(double)union.size();
+				if (jcd[i][j]==1){
+					jcd[i][j]= 0.25;
+				}
+			}
+		}
+		BufferedWriter outputWriter = null;
+		int size =4;
+	  try {
+			outputWriter = new BufferedWriter(new FileWriter(fname));
+			for (int i=0;i<size;i++){
+				outputWriter.write("\"Tier"+i+"\""+",");
+			}
+			outputWriter.newLine();
+	  for (int i = 0; i < size; i++) {
+	  	outputWriter.write("[");
+	  	for (int j =0;j < size;j++){
+	  		outputWriter.write(jcd[i][j]+",");
+	  	}
+	  	outputWriter.write("],");
+	    outputWriter.newLine();
+	  	}
+	  	outputWriter.flush();  
+	  	outputWriter.close(); 
+	  } catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+	}
+	
+	
+	
 	
 	/**Concat 2 strings
 	 */

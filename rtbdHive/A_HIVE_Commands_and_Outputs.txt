@@ -1,0 +1,202 @@
+/*The original file containing all the flattened records is 'dblp_hive_conf.txt'. This as well as the various tier files are in the 'rtbdHive' Folder. The JAVA method used to create the individual tier files is 'GetTiers.java' in the 'rtbdJava' Folder.*/
+
+*****************************************************************************************************************************************************
+
+hive>create external table myTry1 (key STRING, year INT, conf STRING, authors ARRAY<STRING>)ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' COLLECTION ITEMS TERMINATED BY '|' LINES TERMINATED BY '\n' LOCATION 'ENTIRE_DIRECTORY_PATH';
+
+hive>create external table Tier1 (key STRING, year INT, conf STRING, authors ARRAY<STRING>)ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' COLLECTION ITEMS TERMINATED BY '|' LINES TERMINATED BY '\n' LOCATION 'ENTIRE_DIRECTORY_PATH';
+
+hive>create external table Tier2 (key STRING, year INT, conf STRING, authors ARRAY<STRING>)ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' COLLECTION ITEMS TERMINATED BY '|' LINES TERMINATED BY '\n' LOCATION 'ENTIRE_DIRECTORY_PATH';
+
+hive>create external table Tier3 (key STRING, year INT, conf STRING, authors ARRAY<STRING>)ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' COLLECTION ITEMS TERMINATED BY '|' LINES TERMINATED BY '\n' LOCATION 'ENTIRE_DIRECTORY_PATH';
+
+hive>create external table Tier4 (key STRING, year INT, conf STRING, authors ARRAY<STRING>)ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' COLLECTION ITEMS TERMINATED BY '|' LINES TERMINATED BY '\n' LOCATION 'ENTIRE_DIRECTORY_PATH';
+
+hive> show tables;
+OK
+mytry1 /*Has entire original data*/
+tier1 /*Has Tier 1 Records*/
+tier2 /*Has Tier 2 Records*/
+tier3 /*Has Tier 3 Records*/
+tier4 /*Has Tier 4 Records*/
+
+***************************************************************************************************************************************************
+
+hive> describe myTry1;
+OK
+key                 	string              	                    
+year                	int                 	                    
+conf                	string              	                    
+authors             	array<string>       	                    
+Time taken: 0.635 seconds, Fetched: 4 row(s)
+
+
+***************************************************************************************************************************************************
+
+hive> select year, SUM( SIZE( authors ) ), COUNT(key) from myTry1 GROUP BY year; 
+Total jobs = 1
+Launching Job 1 out of 1
+Number of reduce tasks not specified. Estimated from input data size: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+14/05/07 05:30:06 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+14/05/07 05:30:06 WARN conf.Configuration: file:/tmp/aashu/hive_2014-05-07_05-30-03_412_3763259932157454039-1/-local-10003/jobconf.xml:an attempt to override final parameter: mapreduce.job.end-notification.max.retry.interval;  Ignoring.
+14/05/07 05:30:06 WARN conf.Configuration: file:/tmp/aashu/hive_2014-05-07_05-30-03_412_3763259932157454039-1/-local-10003/jobconf.xml:an attempt to override final parameter: mapreduce.job.end-notification.max.attempts;  Ignoring.
+14/05/07 05:30:06 INFO Configuration.deprecation: mapred.reduce.tasks is deprecated. Instead, use mapreduce.job.reduces
+14/05/07 05:30:06 INFO Configuration.deprecation: mapred.min.split.size is deprecated. Instead, use mapreduce.input.fileinputformat.split.minsize
+14/05/07 05:30:06 INFO Configuration.deprecation: mapred.reduce.tasks.speculative.execution is deprecated. Instead, use mapreduce.reduce.speculative
+14/05/07 05:30:06 INFO Configuration.deprecation: mapred.min.split.size.per.node is deprecated. Instead, use mapreduce.input.fileinputformat.split.minsize.per.node
+14/05/07 05:30:06 INFO Configuration.deprecation: mapred.input.dir.recursive is deprecated. Instead, use mapreduce.input.fileinputformat.input.dir.recursive
+14/05/07 05:30:06 INFO Configuration.deprecation: mapred.min.split.size.per.rack is deprecated. Instead, use mapreduce.input.fileinputformat.split.minsize.per.rack
+14/05/07 05:30:06 INFO Configuration.deprecation: mapred.max.split.size is deprecated. Instead, use mapreduce.input.fileinputformat.split.maxsize
+14/05/07 05:30:06 INFO Configuration.deprecation: mapred.committer.job.setup.cleanup.needed is deprecated. Instead, use mapreduce.job.committer.setup.cleanup.needed
+Execution log at: /tmp/aashu/aashu_20140507053030_848f6010-b589-4c51-a3b0-32e4a960e087.log
+Job running in-process (local Hadoop)
+Hadoop job information for null: number of mappers: 0; number of reducers: 0
+2014-05-07 05:30:09,889 null map = 100%,  reduce = 100%
+Ended Job = job_local209685114_0001
+Execution completed successfully
+MapredLocal task succeeded
+OK
+/*year  number_of_authors  number_of_papers*/
+1969		23		27
+1970		33		28
+1971		34		41
+1972		44		45
+1973		12		13
+1974		108		93
+1975		218		145
+1976		111		70
+1977		218		133
+1978		262		166
+1979		283		151
+1980		373		225
+1981		435		281
+1982		494		282
+1983		665		350
+1984		586		278
+1985		550		283
+1986		934		465
+1987		888		434
+1988		1225		569
+1989		1180		567
+1990		1357		631
+1991		1547		735
+1992		1720		812
+1993		2268		1007
+1994		2419		1008
+1995		2785		1165
+1996		2424		992
+1997		3213		1269
+1998		3338		1291
+1999		4273		1649
+2000		4902		1901
+2001		5142		1929
+2002		5887		2155
+2003		6576		2381
+2004		7347		2531
+2005		7968		2699
+2006		8450		2851
+2007		9208		3030
+2008		8934		2955
+2009		10659		3426
+2010		9650		3022
+2011		10749		3440
+2012		11130		3408
+2013		11970		3553
+2014		1033		323
+Time taken: 6.798 seconds, Fetched: 46 row(s)
+
+
+***************************************************************************************************************************************************
+
+hive> select year, SUM( SIZE( authors ) ), COUNT(key), CAST (SUM (SIZE (authors)) AS DECIMAL)/(COUNT(key)) from myTry1 GROUP BY year; 
+Total jobs = 1
+Launching Job 1 out of 1
+Number of reduce tasks not specified. Estimated from input data size: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+14/05/07 05:32:03 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+14/05/07 05:32:03 WARN conf.Configuration: file:/tmp/aashu/hive_2014-05-07_05-32-01_326_2879642204029159381-1/-local-10003/jobconf.xml:an attempt to override final parameter: mapreduce.job.end-notification.max.retry.interval;  Ignoring.
+14/05/07 05:32:03 WARN conf.Configuration: file:/tmp/aashu/hive_2014-05-07_05-32-01_326_2879642204029159381-1/-local-10003/jobconf.xml:an attempt to override final parameter: mapreduce.job.end-notification.max.attempts;  Ignoring.
+14/05/07 05:32:04 INFO Configuration.deprecation: mapred.reduce.tasks is deprecated. Instead, use mapreduce.job.reduces
+14/05/07 05:32:04 INFO Configuration.deprecation: mapred.min.split.size is deprecated. Instead, use mapreduce.input.fileinputformat.split.minsize
+14/05/07 05:32:04 INFO Configuration.deprecation: mapred.reduce.tasks.speculative.execution is deprecated. Instead, use mapreduce.reduce.speculative
+14/05/07 05:32:04 INFO Configuration.deprecation: mapred.min.split.size.per.node is deprecated. Instead, use mapreduce.input.fileinputformat.split.minsize.per.node
+14/05/07 05:32:04 INFO Configuration.deprecation: mapred.input.dir.recursive is deprecated. Instead, use mapreduce.input.fileinputformat.input.dir.recursive
+14/05/07 05:32:04 INFO Configuration.deprecation: mapred.min.split.size.per.rack is deprecated. Instead, use mapreduce.input.fileinputformat.split.minsize.per.rack
+14/05/07 05:32:04 INFO Configuration.deprecation: mapred.max.split.size is deprecated. Instead, use mapreduce.input.fileinputformat.split.maxsize
+14/05/07 05:32:04 INFO Configuration.deprecation: mapred.committer.job.setup.cleanup.needed is deprecated. Instead, use mapreduce.job.committer.setup.cleanup.needed
+Execution log at: /tmp/aashu/aashu_20140507053232_c6ef1fdb-8075-4960-a5ec-6ef7871252cf.log
+Job running in-process (local Hadoop)
+Hadoop job information for null: number of mappers: 0; number of reducers: 0
+2014-05-07 05:32:06,886 null map = 100%,  reduce = 0%
+2014-05-07 05:32:07,916 null map = 100%,  reduce = 100%
+Ended Job = job_local62866528_0001
+Execution completed successfully
+MapredLocal task succeeded
+OK
+/*year  number_of_authors  number_of_papers  Average_number_authors_per_paper*/ 
+1969		23		27		0.85185185185185185185
+1970		33		28		1.17857142857142857143
+1971		34		41		0.82926829268292682927
+1972		44		45		0.97777777777777777778
+1973		12		13		0.92307692307692307692
+1974		108		93		1.16129032258064516129
+1975		218		145		1.50344827586206896552
+1976		111		70		1.58571428571428571429
+1977		218		133		1.63909774436090225564
+1978		262		166		1.57831325301204819277
+1979		283		151		1.87417218543046357616
+1980		373		225		1.65777777777777777778
+1981		435		281		1.54804270462633451957
+1982		494		282		1.75177304964539007092
+1983		665		350		1.9
+1984		586		278		2.10791366906474820144
+1985		550		283		1.94346289752650176678
+1986		934		465		2.0086021505376344086
+1987		888		434		2.04608294930875576037
+1988		1225		569		2.15289982425307557118
+1989		1180		567		2.08112874779541446208
+1990		1357		631		2.15055467511885895404
+1991		1547		735		2.1047619047619047619
+1992		1720		812		2.11822660098522167488
+1993		2268		1007		2.25223435948361469712
+1994		2419		1008		2.39980158730158730159
+1995		2785		1165		2.39055793991416309013
+1996		2424		992		2.44354838709677419355
+1997		3213		1269		2.5319148936170212766
+1998		3338		1291		2.58559256390395042603
+1999		4273		1649		2.59126743480897513645
+2000		4902		1901		2.57864281956864807996
+2001		5142		1929		2.66562986003110419907
+2002		5887		2155		2.73178654292343387471
+2003		6576		2381		2.76186476270474590508
+2004		7347		2531		2.90280521532990912683
+2005		7968		2699		2.95220452019266394961
+2006		8450		2851		2.96387232549982462294
+2007		9208		3030		3.03894389438943894389
+2008		8934		2955		3.02335025380710659898
+2009		10659		3426		3.11120840630472854641
+2010		9650		3022		3.19324950363997352747
+2011		10749		3440		3.12470930232558139535
+2012		11130		3408		3.26584507042253521127
+2013		11970		3553		3.3689839572192513369
+2014		1033		323		3.19814241486068111455
+Time taken: 6.943 seconds, Fetched: 46 row(s)
+
+The same queries were also run on the Tier Tables.
+
+
+***************************************************************************************************************************************************
+
+
+
